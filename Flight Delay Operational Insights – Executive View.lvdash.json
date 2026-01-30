@@ -1,0 +1,846 @@
+{
+  "datasets": [
+    {
+      "name": "a3844439",
+      "displayName": "Overall Flight Delay Rate",
+      "queryLines": [
+        "SELECT\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  SUM(is_delayed) AS delayed_flights,\r\n",
+        "  ROUND(SUM(is_delayed) * 100.0 / COUNT(*), 2) AS delay_percentage\r\n",
+        "FROM workspace.flight_delay.gold_flight_features;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "e5c86d2b",
+      "displayName": "Airline-wise Delay Performance",
+      "queryLines": [
+        "SELECT\r\n",
+        "  AIRLINE,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY AIRLINE\r\n",
+        "ORDER BY delay_rate_percent DESC;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "b35b9805",
+      "displayName": "Busiest Routes with Highest Delays",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ORIGIN,\r\n",
+        "  DEST,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY ORIGIN, DEST\r\n",
+        "HAVING COUNT(*) > 500\r\n",
+        "ORDER BY delay_rate_percent DESC;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "d8cce3a9",
+      "displayName": "Peak Hour vs Off-Peak Delay Comparison",
+      "queryLines": [
+        "SELECT\r\n",
+        "  is_peak_hour,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY is_peak_hour;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "0833eb85",
+      "displayName": "Flight Delay Rates by Weather Condition",
+      "queryLines": [
+        "SELECT\r\n",
+        "  CASE \r\n",
+        "    WHEN DELAY_DUE_WEATHER > 0 THEN 'Weather Impacted'\r\n",
+        "    ELSE 'No Weather Impact'\r\n",
+        "  END AS weather_flag,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY weather_flag;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "163bf783",
+      "displayName": "Airport Flight Delays and Volume Analysis",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ORIGIN AS airport,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY ORIGIN\r\n",
+        "HAVING COUNT(*) > 1000\r\n",
+        "ORDER BY delay_rate_percent DESC;\r\n"
+      ]
+    },
+    {
+      "name": "059615be",
+      "displayName": "Overall Delay Rate (%)",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ROUND(SUM(is_delayed) * 100.0 / COUNT(*), 2) AS delay_percentage\r\n",
+        "FROM workspace.flight_delay.gold_flight_features;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "f4da69ab",
+      "displayName": "Total Flights Analyzed",
+      "queryLines": [
+        "SELECT COUNT(*) AS total_flights\r\n",
+        "FROM workspace.flight_delay.gold_flight_features;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "3fa0c0d1",
+      "displayName": "Peak Hour Delay Rate",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS peak_hour_delay_rate\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "WHERE is_peak_hour = 1;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "ad135f54",
+      "displayName": "Delay Rate by Airline",
+      "queryLines": [
+        "SELECT\r\n",
+        "  AIRLINE,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY AIRLINE\r\n",
+        "ORDER BY delay_rate_percent DESC;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "d2811a4e",
+      "displayName": "Top Delayed Routes",
+      "queryLines": [
+        "SELECT\r\n",
+        "  ORIGIN,\r\n",
+        "  DEST,\r\n",
+        "  COUNT(*) AS total_flights,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY ORIGIN, DEST\r\n",
+        "HAVING COUNT(*) > 500\r\n",
+        "ORDER BY delay_rate_percent DESC\r\n",
+        "LIMIT 10;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "b47148dc",
+      "displayName": "Peak vs Off-Peak Delay Comparison",
+      "queryLines": [
+        "SELECT\r\n",
+        "  CASE \r\n",
+        "    WHEN is_peak_hour = 1 THEN 'Peak Hours'\r\n",
+        "    ELSE 'Off-Peak Hours'\r\n",
+        "  END AS time_category,\r\n",
+        "  ROUND(AVG(is_delayed) * 100, 2) AS delay_rate_percent\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "GROUP BY time_category;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    },
+    {
+      "name": "66b40a58",
+      "displayName": "Delay Cause Contribution",
+      "queryLines": [
+        "SELECT 'Weather' AS reason, COUNT(*) AS flights\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "WHERE DELAY_DUE_WEATHER > 0\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "SELECT 'NAS (Air Traffic)', COUNT(*)\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "WHERE DELAY_DUE_NAS > 0\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "SELECT 'Carrier', COUNT(*)\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "WHERE DELAY_DUE_CARRIER > 0\r\n",
+        "\r\n",
+        "UNION ALL\r\n",
+        "SELECT 'Late Aircraft', COUNT(*)\r\n",
+        "FROM workspace.flight_delay.gold_flight_features\r\n",
+        "WHERE DELAY_DUE_LATE_AIRCRAFT > 0;\r\n"
+      ],
+      "catalog": "workspace",
+      "schema": "flight_delay"
+    }
+  ],
+  "pages": [
+    {
+      "name": "641b3359",
+      "displayName": "dash board",
+      "layout": [
+        {
+          "widget": {
+            "name": "airline-delay-performance",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ad135f54",
+                  "fields": [
+                    {
+                      "name": "delay_rate_percent",
+                      "expression": "`delay_rate_percent`"
+                    },
+                    {
+                      "name": "AIRLINE",
+                      "expression": "`AIRLINE`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "delay_rate_percent",
+                  "displayName": "Delay_Rate %",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "AIRLINE",
+                  "displayName": "Airline ",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Airline-wise Delay Performance (%)"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 3,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "primary-contributors-flight-delays",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "66b40a58",
+                  "fields": [
+                    {
+                      "name": "flights",
+                      "expression": "`flights`"
+                    },
+                    {
+                      "name": "reason",
+                      "expression": "`reason`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "flights",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "reason",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Primary Contributors to Flight Delays"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "top-delayed-routes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d2811a4e",
+                  "fields": [
+                    {
+                      "name": "ORIGIN",
+                      "expression": "`ORIGIN`"
+                    },
+                    {
+                      "name": "DEST",
+                      "expression": "`DEST`"
+                    },
+                    {
+                      "name": "total_flights",
+                      "expression": "`total_flights`"
+                    },
+                    {
+                      "name": "delay_rate_percent",
+                      "expression": "`delay_rate_percent`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "ORIGIN",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "ORIGIN",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "DEST",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "DEST",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "total_flights",
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "total_flights",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "delay_rate_percent",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100003,
+                    "title": "delay_rate_percent",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": null
+                      },
+                      "rules": [
+                        {
+                          "if": {
+                            "column": "delay_rate_percent",
+                            "fn": ">",
+                            "literal": "30"
+                          },
+                          "value": {
+                            "foregroundColor": {
+                              "themeColorType": "visualizationColors",
+                              "position": 4
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "showTitle": true,
+                "title": "High-Risk Routes (High Volume & High Delay)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 2,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "peak-hour-delay-rate",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3fa0c0d1",
+                  "fields": [
+                    {
+                      "name": "approx_percentile(peak_hour_delay_rate, percentage=0_5)",
+                      "expression": "APPROX_PERCENTILE(`peak_hour_delay_rate`, 0.5)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "approx_percentile(peak_hour_delay_rate, percentage=0_5)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Peak Hour Delay Rate",
+                "showDescription": true,
+                "description": "7–10 AM & 4–8 PM"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 1,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "overall-delay-rate",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "059615be",
+                  "fields": [
+                    {
+                      "name": "sum(delay_percentage)",
+                      "expression": "SUM(`delay_percentage`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(delay_percentage)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Overall Delay Rate (%)",
+                "showDescription": true,
+                "description": "% flights delayed > 15 mins"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 1,
+            "width": 1,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "total-flights-analyzed",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f4da69ab",
+                  "fields": [
+                    {
+                      "name": "sum(total_flights)",
+                      "expression": "SUM(`total_flights`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_flights)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Total Flights Analyzed",
+                "showDescription": true,
+                "description": "Historical flights (2019–2023)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 1,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "delay-rate-time-of-day-peak-vs-off-peak",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d8cce3a9",
+                  "fields": [
+                    {
+                      "name": "delay_rate_percent",
+                      "expression": "`delay_rate_percent`"
+                    },
+                    {
+                      "name": "total_flights",
+                      "expression": "`total_flights`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "delay_rate_percent",
+                  "displayName": "delay %",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "total_flights",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Delay Rate by Time of Day (Peak vs Off-Peak)"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 4,
+            "width": 1,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "f00139e0",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## <span style=\"text-align:center;display:block\">Flight Delay Performance & Insights</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "44ccf41d",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "16a55d88",
+            "queries": [
+              {
+                "name": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd41051816c1a96fba6e08397afa_AIRLINE",
+                "query": {
+                  "datasetName": "e5c86d2b",
+                  "fields": [
+                    {
+                      "name": "AIRLINE",
+                      "expression": "`AIRLINE`"
+                    },
+                    {
+                      "name": "AIRLINE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "AIRLINE",
+                    "queryName": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd41051816c1a96fba6e08397afa_AIRLINE"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#0F1010"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "1a9416c8",
+            "queries": [
+              {
+                "name": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd433d661324868f3c5b68c9918a_DEST",
+                "query": {
+                  "datasetName": "d2811a4e",
+                  "fields": [
+                    {
+                      "name": "DEST",
+                      "expression": "`DEST`"
+                    },
+                    {
+                      "name": "DEST_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "DEST",
+                    "queryName": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd433d661324868f3c5b68c9918a_DEST"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "3303124e",
+            "queries": [
+              {
+                "name": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd433d661324868f3c5b68c9918a_ORIGIN",
+                "query": {
+                  "datasetName": "d2811a4e",
+                  "fields": [
+                    {
+                      "name": "ORIGIN",
+                      "expression": "`ORIGIN`"
+                    },
+                    {
+                      "name": "ORIGIN_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ORIGIN",
+                    "queryName": "dashboards/01f0fd40b4ef138bb28fe771531f74f6/datasets/01f0fd433d661324868f3c5b68c9918a_ORIGIN"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
